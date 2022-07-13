@@ -11,12 +11,24 @@ class Customer(models.Model):
         (GOLD_MEMEBR_SHIP,'GOLD')
     )
 
-    first_name=models.CharField(55)
-    last_name=models.CharField(55)
+    first_name=models.CharField(max_length=255)
+    last_name=models.CharField(max_length=255)
     email=models.EmailField()
     phone=models.CharField(max_length=25)
     birth_date=models.DateField()
     memeber_ship=models.CharField(max_length=15,choices=MEMBER_SHIP,default=BRONZE_MEMBER_SHIP)
+
+
+class Collection(models.Model):
+    name=models.CharField(max_length=255)
+    featured_product=models.ForeignKey('Product',on_delete=models.SET_NULL,null=True,related_name='+')
+
+
+class Promotion(models.Model):
+    discription=models.CharField(max_length=255)
+    discount=models.CharField(max_length=255)
+    date_started=models.DateTimeField(auto_now=True)
+    date_ended=models.DateTimeField()
 
 
 class Product(models.Model):
@@ -25,6 +37,8 @@ class Product(models.Model):
     inventory=models.PositiveSmallIntegerField()
     date_added=models.DateField(auto_now=True)
     discription=models.TextField()
+    collection=models.ForeignKey(Collection,on_delete=models.PROTECT)
+    promotions=models.ManyToManyField(Promotion)
 
 
 class Cart(models.Model):
@@ -33,5 +47,5 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart=models.ForeignKey(Cart,on_delete=models.CASCADE)
-    item=models.ForeignKey(Product,on_delete=models.SET_NULL)
+    item=models.ForeignKey(Product,on_delete=models.SET_NULL,null=True)
     date_added=models.DateField(auto_now=True)

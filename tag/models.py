@@ -12,4 +12,4 @@ class TaggedItem(models.Model):
     tag=models.ForeignKey(Tag,on_delete=models.CASCADE)
     content_type=models.ForeignKey(ContentType,on_delete=models.CASCADE)
     content_id=models.PositiveIntegerField()
-    content_objec=GenericForeignKey()
+    content_objec=GenericForeignKey('content_type','content_id')
